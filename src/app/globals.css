@@ -13,8 +13,8 @@
   --color-primary-800: #0a2c17;
   --color-primary-900: #051a0e;
 
-  --color-accent-500: #d97706;
-  --color-accent-600: #b45309;
+  --color-accent-500: #b45309;   /* Changed from #d97706 — now 4.6:1 on white */
+  --color-accent-600: #92400e;   /* Changed from #b45309 */
 
   --color-ink-50: #f8fafc;
   --color-ink-100: #f1f5f9;
@@ -34,4 +34,67 @@ body {
   background-color: white;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+/* ── Accessibility: Focus Styles ── */
+
+/* Remove default outline only if we provide a custom one */
+*:focus {
+  outline: none;
+}
+
+/* Custom focus ring for all interactive elements */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode support */
+@media (forced-colors: active) {
+  .rounded-full,
+  .rounded-lg,
+  .rounded-xl {
+    border: 1px solid ButtonText;
+  }
+}
+
+/* ── Utility: Screen reader only ── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.focus\:not-sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
 }

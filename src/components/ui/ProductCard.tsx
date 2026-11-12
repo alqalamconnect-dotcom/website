@@ -24,9 +24,15 @@ export default function ProductCard({ product }: ProductCardProps) {
       className="group flex flex-col overflow-hidden rounded-xl border border-ink-100 bg-white transition-shadow hover:shadow-md"
     >
       {/* Image Placeholder */}
-      <div className="flex h-48 items-center justify-center bg-ink-50">
-        <span className="text-sm text-ink-700/50">Product Image</span>
-      </div>
+      <div
+  className="flex h-48 items-center justify-center bg-ink-50"
+  role="img"
+  aria-label={`Photo of ${product.name} — coming soon`}
+>
+  <span className="text-sm text-ink-700/50" aria-hidden="true">
+    Product Image
+  </span>
+</div>
 
       {/* Content */}
       <div className="flex flex-1 flex-col p-5">

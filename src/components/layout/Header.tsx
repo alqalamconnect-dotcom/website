@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
@@ -22,8 +22,21 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
+  const toggleMenu = useCallback(
+    (e: React.PointerEvent | React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setMobileOpen((prev) => !prev);
+    },
+    []
+  );
+
+  const closeMenu = useCallback(() => {
+    setMobileOpen(false);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 border-b border-ink-100 bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-50 overflow-visible border-b border-ink-100 bg-white/95 backdrop-blur">
       <Container>
         <div className="flex h-16 items-center justify-between">
           {/* Brand */}
@@ -62,51 +75,56 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Mobile Menu Toggle */}
+          {/* Mobile Menu Button */}
           <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="rounded-md p-2 text-ink-700 hover:bg-ink-50 lg:hidden"
+            type="button"
+            onPointerUp={toggleMenu}
+            className="inline-flex h-12 w-12 items-center justify-center rounded-md text-ink-700 active:bg-ink-100 lg:hidden"
+            style={{
+              touchAction: "manipulation",
+              WebkitTapHighlightColor: "transparent",
+            }}
             aria-expanded={mobileOpen}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
           >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+            {mobileOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
       </Container>
 
-      {/* Mobile Navigation */}
+      {/* Mobile Navigation Dropdown */}
       {mobileOpen && (
-        <nav
-          className="border-t border-ink-100 bg-white lg:hidden"
-          aria-label="Mobile navigation"
-        >
+        <div className="absolute left-0 right-0 top-full z-50 border-b border-ink-100 bg-white shadow-lg lg:hidden">
           <Container>
-            <div className="space-y-1 py-4">
-              {navLinks.map((link) => {
-                const isActive =
-                  link.href === "/"
-                    ? pathname === "/"
-                    : pathname.startsWith(link.href);
+            <nav aria-label="Mobile navigation" className="py-3">
+              <div className="flex flex-col gap-1">
+                {navLinks.map((link) => {
+                  const isActive =
+                    link.href === "/"
+                      ? pathname === "/"
+                      : pathname.startsWith(link.href);
 
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setMobileOpen(false)}
-                    className={cn(
-                      "block rounded-md px-3 py-2 text-base font-medium transition-colors",
-                      isActive
-                        ? "bg-primary-50 text-primary-600"
-                        : "text-ink-700 hover:bg-ink-50"
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </div>
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={closeMenu}
+                      className={cn(
+                        "rounded-md px-4 py-3 text-base font-medium transition-colors active:bg-ink-100",
+                        isActive
+                          ? "bg-primary-50 text-primary-600"
+                          : "text-ink-700"
+                      )}
+                      style={{ touchAction: "manipulation" }}
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                })}
+              </div>
+            </nav>
           </Container>
-        </nav>
+        </div>
       )}
     </header>
   );

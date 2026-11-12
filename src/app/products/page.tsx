@@ -1,3 +1,8 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Products",
+};
 import { products } from "@/data/products";
 import Container from "@/components/ui/Container";
 import PageHeader from "@/components/ui/PageHeader";

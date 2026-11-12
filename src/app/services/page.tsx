@@ -1,3 +1,9 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Services",
+};
+
 import PageHeader from "@/components/ui/PageHeader";
 import Container from "@/components/ui/Container";
 
